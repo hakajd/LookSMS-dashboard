@@ -1,0 +1,20 @@
+# Dépendances Composer
+src/vendor/
+
+# Données sensibles
+.env
+*.env
+src/config.local.php
+
+# Uploads et données runtime
+src/uploads/
+src/files/
+src/temp/
+
+# Logs
+*.log
+src/logs/
+
+# OS
+.DS_Store
+Thumbs.db
