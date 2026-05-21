@@ -62,6 +62,7 @@ try {
     $msg->setDeviceID($device->getID());
     $msg->setUserID($user->getID());
     $msg->setStatus("Queued");
+    $msg->setSentDate(date("Y-m-d H:i:s"));
     $msg->setGroupID(uniqid('direct_', true));
     $msg->save();
 

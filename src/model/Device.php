@@ -268,36 +268,28 @@ class Device extends Entity implements JsonSerializable
      */
     public static function processRequests(array $groups, ?User $user = null): void
     {
-        $errors = [];
         foreach ($groups as $group) {
             /** @var Device $device */
             $device = $group["device"];
 
-            try {
-                $fbConfig = Setting::get('firebase_service_account_json') ?: getenv('FIREBASE_SERVICE_ACCOUNT_JSON');
-                if (!empty($device->getToken()) && !empty($fbConfig)) {
+            $fbConfig = Setting::get('firebase_service_account_json') ?: getenv('FIREBASE_SERVICE_ACCOUNT_JSON');
+            if (!empty($device->getToken()) && !empty($fbConfig)) {
+                try {
                     $device->sendPushNotification($group["data"]);
-                }
-                $user?->depleteCredits($group["count"]);
-            } catch (MessagingException|FirebaseException $e) {
-                $error = json_decode($e->getMessage())?->error ?? $e->getMessage();
-                if (str_contains($error, $device->getToken())) {
-                    $device->setEnabled(0);
-                    $device->save();
-                    $errors[] = $device . " : NotRegistered";
-                } else {
-                    $errors[] = $device . " : $error";
+                } catch (MessagingException|FirebaseException $e) {
+                    // Token invalide : nettoyer le token mais ne pas bloquer
+                    // Les messages sont déjà en DB, le heartbeat 15 min les récupère
+                    $error = json_decode($e->getMessage())?->error ?? $e->getMessage();
+                    if (str_contains($error, $device->getToken())) {
+                        $device->setToken(null);
+                        $device->save();
+                    }
                 }
             }
-        }
 
-        if (count($errors) > 0) {
-            $error = "You have the following errors while sending messages.\n";
-            $error .= "\n";
-            foreach ($errors as $err) {
-                $error .= "* {$err}\n";
+            if ($user !== null && isset($group["count"])) {
+                $user->depleteCredits($group["count"]);
             }
-            throw new Exception($error);
         }
     }
 
