@@ -23,7 +23,7 @@ services:
       - internal
     labels:
       - traefik.enable=true
-      - traefik.http.routers.looksms.rule=Host(`sms.lnkf.net`)
+      - traefik.http.routers.looksms.rule=Host(`app.looksms.com`) || Host(`sms.lnkf.net`)
       - traefik.http.routers.looksms.entrypoints=websecure
       - traefik.http.routers.looksms.tls.certresolver=mytlschallenge
       - traefik.http.services.looksms.loadbalancer.server.port=80
