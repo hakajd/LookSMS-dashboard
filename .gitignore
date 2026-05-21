@@ -1,19 +1,37 @@
-# Dépendances Composer
+# PHP / Composer
 src/vendor/
+src/config.local.php
 
 # Données sensibles
 .env
-*.env
-src/config.local.php
+.env.*
+!.env.example
 
-# Uploads et données runtime
-src/uploads/
-src/files/
-src/temp/
+# Node / JS (assets)
+node_modules/
+jspm_packages/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+.pnpm-store
 
 # Logs
 *.log
 src/logs/
+logs/
+
+# Build outputs
+dist/
+.next/
+.nuxt/
+build/Release
+
+# Cache
+.cache/
+.parcel-cache/
+.firebase/
 
 # OS
 .DS_Store
