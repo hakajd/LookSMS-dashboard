@@ -11,7 +11,7 @@ use chillerlan\QRCode\Output\QROutputInterface;
 
 $title = __("application_title") . " | Télécharger l'app";
 
-$downloadUrl = "https://sms.lnkf.net/download/LookSMS-latest.apk";
+$downloadUrl = "https://app.looksms.com/download/LookSMS-latest.apk";
 
 $options = new QROptions;
 $options->outputType = QROutputInterface::GDIMAGE_PNG;
