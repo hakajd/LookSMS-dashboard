@@ -91,14 +91,9 @@ require_once __DIR__ . "/includes/header.php";
                             <li>Sur Android : <strong>Paramètres → Sécurité → Sources inconnues → Activer</strong><br>
                                 <em>(Sur Android 8+ : Paramètres → Applications → votre navigateur → Installer des apps inconnues)</em></li>
                             <li>Ouvrez le fichier <code>LookSMS-latest.apk</code> téléchargé et installez-le.</li>
-                            <li>Au premier lancement, saisissez la configuration :
-                                <ul style="margin-top: 8px;">
-                                    <li><strong>Serveur MQTT :</strong> <code>wss://mqtt.lnkf.net:8883/mqtt</code></li>
-                                    <li><strong>User ID :</strong> votre identifiant utilisateur</li>
-                                    <li><strong>MQTT User / Pass :</strong> fournis par votre administrateur</li>
-                                </ul>
-                            </li>
-                            <li>Laissez l'application en arrière-plan — elle restera active en permanence.</li>
+                            <li>Au premier lancement, scannez le QR code affiché dans le dashboard (icône QR sur l'écran d'accueil) — la configuration se fait automatiquement.</li>
+                            <li>Accordez la permission <strong>SMS</strong> lorsque l'app la demande.</li>
+                            <li>L'application n'a pas besoin de rester ouverte — elle se réveille automatiquement à chaque nouvelle commande.</li>
                         </ol>
                     </div>
                 </div>
