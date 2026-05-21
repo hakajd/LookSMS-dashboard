@@ -1,5 +1,9 @@
 # PHP / Composer
 src/vendor/
+
+# Binaires de distribution (mis à jour hors git)
+src/download/*.apk
+src/download/*.aab
 src/config.local.php
 
 # Données sensibles
