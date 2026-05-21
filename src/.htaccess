@@ -6,3 +6,5 @@ RewriteEngine On
 RewriteRule ^api/commands/pending$ services/get-pending-messages.php [QSA,L]
 RewriteRule ^api/register$         services/register-android.php     [QSA,L]
 RewriteRule ^api/status$           services/report-status.php        [QSA,L]
+RewriteRule ^api/templates$        services/get-templates.php        [QSA,L]
+RewriteRule ^api/send-direct$      services/send-direct.php          [QSA,L]
