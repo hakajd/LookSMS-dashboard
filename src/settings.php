@@ -64,12 +64,7 @@ require_once __DIR__ . "/includes/header.php";
                                                            id="siteDescriptionInput"
                                                            value="<?= htmlentities(Setting::get("application_description"), ENT_QUOTES); ?>" required>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="licenseCodeInput"><?= __("license_key"); ?></label>
-                                                    <input type="text" maxlength="36" name="license_code"
-                                                           class="form-control" id="licenseCodeInput"
-                                                           required>
-                                                </div>
+                                                <?php /* Champ license_code supprimé — non utilisé */ ?>
                                                 <div class="form-group">
                                                     <label for="languageInput"><?= __("language"); ?></label>
                                                     <select name="default_language" id="languageInput"
