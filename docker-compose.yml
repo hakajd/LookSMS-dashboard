@@ -1,0 +1,59 @@
+services:
+  app:
+    build: .
+    image: looksms-app:latest
+    container_name: looksms-app
+    restart: unless-stopped
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASS: ${MYSQL_PASSWORD}
+      APP_SECRET_KEY: ${APP_SECRET_KEY}
+      APP_TIMEZONE: ${APP_TIMEZONE}
+      FIREBASE_SERVICE_ACCOUNT_JSON: ${FIREBASE_SERVICE_ACCOUNT_JSON}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - traefik
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.looksms.rule=Host(`sms.lnkf.net`)
+      - traefik.http.routers.looksms.entrypoints=websecure
+      - traefik.http.routers.looksms.tls.certresolver=mytlschallenge
+      - traefik.http.services.looksms.loadbalancer.server.port=80
+      - traefik.docker.network=root_default
+
+  db:
+    image: mysql:8.0
+    container_name: looksms-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
+
+networks:
+  traefik:
+    external: true
+    name: root_default
+  internal:
+    driver: bridge

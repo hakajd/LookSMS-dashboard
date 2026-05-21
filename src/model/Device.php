@@ -245,8 +245,11 @@ class Device extends Entity implements JsonSerializable
      */
     public function sendPushNotification(array $data = []): void
     {
+        $serviceAccount = Setting::get('firebase_service_account_json')
+            ?: getenv('FIREBASE_SERVICE_ACCOUNT_JSON');
+
         $messaging = (new Factory)
-            ->withServiceAccount(Setting::get('firebase_service_account_json'))
+            ->withServiceAccount($serviceAccount)
             ->createMessaging();
 
         $config = AndroidConfig::new()->withHighMessagePriority();
@@ -271,7 +274,8 @@ class Device extends Entity implements JsonSerializable
             $device = $group["device"];
 
             try {
-                if (!empty($device->getToken()) && !empty(Setting::get('firebase_service_account_json'))) {
+                $fbConfig = Setting::get('firebase_service_account_json') ?: getenv('FIREBASE_SERVICE_ACCOUNT_JSON');
+                if (!empty($device->getToken()) && !empty($fbConfig)) {
                     $device->sendPushNotification($group["data"]);
                 }
                 $user?->depleteCredits($group["count"]);
