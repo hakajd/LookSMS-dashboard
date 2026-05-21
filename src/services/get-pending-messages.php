@@ -55,18 +55,19 @@ try {
         exit;
     }
 
-    // Récupération atomique des messages Pending → Queued
+    // Récupération atomique : UPDATE Pending→Queued d'abord, SELECT ensuite (évite race condition)
     MysqliDb::getInstance()->startTransaction();
 
-    $messages = Message::where("deviceID", $device->getID())
-        ->where("status", "Pending")
-        ->read_all(false);
+    // Étape 1 : marquer atomiquement Pending → Queued
+    MysqliDb::getInstance()->rawQuery(
+        "UPDATE messages SET status = 'Queued' WHERE deviceID = ? AND status = 'Pending'",
+        [$device->getID()]
+    );
 
-    if (!empty($messages)) {
-        $ids = array_map(fn(Message $m) => $m->getID(), $messages);
-        Message::where("ID", $ids, "IN")
-            ->update_all(["status" => "Queued"]);
-    }
+    // Étape 2 : lire les messages qu'on vient de marquer (et les Queued non encore traités)
+    $messages = Message::where("deviceID", $device->getID())
+        ->where("status", "Queued")
+        ->read_all(false);
 
     MysqliDb::getInstance()->commit();
 
